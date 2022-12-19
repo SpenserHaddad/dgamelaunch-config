@@ -48,11 +48,12 @@ prompt "compile ${GAME}-${REVISION}"
 # REMEMBER to adjust /var/lib/dgamelaunch/sbin/install-trunk.sh as well if make parameters change!
 ##################################################################################################
 
-say-do crawl-do nice make -C source \
+say-do crawl-do nice make -j 8 -C source \
     GAME=${GAME}-${REVISION} \
     GAME_MAIN=${GAME} MCHMOD=0755 MCHMOD_SAVEDIR=755 \
     INSTALL_UGRP=$CRAWL_UGRP \
     WEBTILES=YesPlease USE_DGAMELAUNCH=YesPlease WIZARD=YesPlease \
+    LTO=yes \
     STRIP=true DESTDIR=${DESTDIR} prefix= bin_prefix=/bin \
     SAVEDIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/saves \
     DATADIR=$CHROOT_CRAWL_BASEDIR/${GAME}-${REVISION}/data \
