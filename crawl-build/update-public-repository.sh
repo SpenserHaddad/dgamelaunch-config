@@ -28,8 +28,8 @@ update-crawl-ref() {
 }
 
 update-submodules() {
-    say "Updating git submodules in $REPO_DIR"
-    ( cd $REPO_DIR && git submodule update --init )
+    say "NOT Updating git submodules in $REPO_DIR"
+    # ( cd $REPO_DIR && git submodule update --init )
 }
 
 BRANCH=$1
