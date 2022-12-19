@@ -28,8 +28,8 @@ mkdir -p "$CHROOT_CRAWL_BASEDIR" \
          "$CHROOT_MENUSDIR" \
          "$CHROOT_INPROGRESSDIR" \
 touch "$DGL_CHROOT/dgamelaunch" "$DGL_CHROOT/dgldebug.log"
-echo "Own $DGL_CHROOT/$DGLDIR and $CHROOT_CRAWL_BASEDIR"
-chown -R $CRAWL_UGRP "$DGL_CHROOT/dgldebug.log" "$DGL_CHROOT/$DGLDIR" "$CHROOT_CRAWL_BASEDIR"
+echo "Own $DGLDIR and $CHROOT_CRAWL_BASEDIR"
+chown -R $CRAWL_UGRP "$DGL_CHROOT/dgldebug.log" "$DGLDIR" "$CHROOT_CRAWL_BASEDIR"
 
 mkdir -p "$GAME_DIR"/saves/{sprint,zotdef}
 ( cd "$GAME_DIR/saves" &&
