@@ -95,8 +95,8 @@ create-dgl-directories() {
 }
 
 fix-chroot-directory-permissions() {
-    chown -R crawl:crawl "$CHROOT_CRAWL_BASEDIR"
-    chown -R crawl:crawl "$CHROOT_DGLDIR"
+    chown -R $CRAWL_UGRP "$CHROOT_CRAWL_BASEDIR"
+    chown -R $CRAWL_UGRP "$CHROOT_DGLDIR"
 }
 
 install-game() {
