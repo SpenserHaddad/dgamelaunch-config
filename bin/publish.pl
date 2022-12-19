@@ -17,7 +17,10 @@ GetOptions(\%OPT, "match=s", "skip=s", "confirm", "target=s")
   or die "Bad command line: @ARGV\n";
 
 my $CHROOT = $ENV{DGL_CHROOT};
-die "DGL chroot not specified in environment\n" unless $CHROOT;
+die "DGL chroot not specified in environment\n" unless defined $CHROOT;
+
+my $DGLDIR = $ENV{DGLDIR};
+die "DGL directory not specified in environment\n" unless defined $DGLDIR;
 
 # Paths starting with // are relative to the system root
 # Paths starting with / are relative to the chroot's root
@@ -25,13 +28,13 @@ my @COPY_TARGETS = ([ 'dgamelaunch.conf', '//etc' ],
                     [ 'utils/auth-save-downloader.pl', '//usr/lib/cgi-bin' ],
                     [ 'utils/trigger-rebuild.pl', '//usr/lib/cgi-bin' ],
                     [ 'utils/webtiles', '//etc/init.d' ],
-                    [ 'config.py', "/crawl-master/webserver" ],
-                    [ 'config.yml', "/crawl-master/webserver" ],
-                    [ 'games.d/*.{yml,yaml}', "/crawl-master/webserver/games.d" ],
-                    [ 'banned_players.yml', "/crawl-master/webserver" ],
-                    [ 'banned_players.txt', "/crawl-master/webserver" ],
-                    [ 'chroot/data/menus/*.txt', "/dgldir/data/menus" ],
-                    [ 'chroot/data/*.{rc,macro}', "/dgldir/data" ],
+                    [ 'config.py', "//crawl-master/webserver" ],
+                    [ 'config.yml', "//crawl-master/webserver" ],
+                    [ 'games.d/*.{yml,yaml}', "//crawl-master/webserver/games.d" ],
+                    [ 'banned_players.yml', "//crawl-master/webserver" ],
+                    [ 'banned_players.txt', "//crawl-master/webserver" ],
+                    [ 'chroot/data/menus/*.txt', "/$DGLDIR/data/menus" ],
+                    [ 'chroot/data/*.{rc,macro}', "/$DGLDIR/data" ],
                     [ 'chroot/bin/*.sh', '/bin' ],
                     [ 'chroot/sbin/*.sh', '/sbin' ]);
 
@@ -161,7 +164,7 @@ sub qualify_directory($) {
 
 sub substitute_variable($$) {
   my ($file, $var) = @_;
-  die "$file refers to unknown variable $var.\n" unless $ENV{$var};
+  die "$file refers to unknown variable $var.\n" unless defined $ENV{$var};
   $ENV{$var}
 }
 
