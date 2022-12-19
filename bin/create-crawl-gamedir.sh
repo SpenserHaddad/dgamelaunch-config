@@ -15,21 +15,21 @@ assert-chroot-exists
 # TODO: perhaps do these unconditionally? It's not very risky. In fact, one
 # could pretty safely just run this entire script unconditionally.
 mkdir -p "$DGL_CHROOT/cores"
-mkdir -p "$DGL_CHROOT/crawl-master" \
-         "$DGL_CHROOT/crawl-master/webserver/" \
-         "$DGL_CHROOT/crawl-master/webserver/run/" \
-         "$DGL_CHROOT/crawl-master/webserver/sockets/" \
-         "$DGL_CHROOT/crawl-master/webserver/templates/" \
-         "$DGL_CHROOT/dgldir" \
-         "$DGL_CHROOT/dgldir/data/" \
-         "$DGL_CHROOT/dgldir/dumps/" \
-         "$DGL_CHROOT/dgldir/morgue/" \
-         "$DGL_CHROOT/dgldir/rcfiles/" \
-         "$DGL_CHROOT/dgldir/ttyrec/" \
-         "$DGL_CHROOT/dgldir/data/menus/" \
-         "$DGL_CHROOT/dgldir/inprogress/"
+mkdir -p "$CHROOT_CRAWL_BASEDIR" \
+         "$CHROOT_WEBDIR/" \
+         "$CHROOT_WEBDIR/run/" \
+         "$CHROOT_WEBDIR/sockets/" \
+         "$CHROOT_WEBDIR/templates/" \
+         "$CHROOT_DGLDIR/data" \
+         "$CHROOT_SAVE_DUMPDIR" \
+         "$CHROOT_MORGUEDIR" \
+         "$CHROOT_RCFILESDIR" \
+         "$CHROOT_TTYRECDIR" \
+         "$CHROOT_MENUSDIR" \
+         "$CHROOT_INPROGRESSDIR" \
 touch "$DGL_CHROOT/dgamelaunch" "$DGL_CHROOT/dgldebug.log"
-chown -R $CRAWL_UGRP "$DGL_CHROOT/dgldebug.log" "$DGL_CHROOT/dgldir" "$DGL_CHROOT/crawl-master"
+echo "Own $DGL_CHROOT/$DGLDIR and $CHROOT_CRAWL_BASEDIR"
+chown -R $CRAWL_UGRP "$DGL_CHROOT/dgldebug.log" "$DGL_CHROOT/$DGLDIR" "$CHROOT_CRAWL_BASEDIR"
 
 mkdir -p "$GAME_DIR"/saves/{sprint,zotdef}
 ( cd "$GAME_DIR/saves" &&

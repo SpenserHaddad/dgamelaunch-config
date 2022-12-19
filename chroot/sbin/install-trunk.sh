@@ -32,6 +32,7 @@ CHROOT="%%DGL_CHROOT%%"
 CHROOT_BINARIES="%%CHROOT_CRAWL_BINARY_PATH%%"
 GAME="%%GAME%%"
 CHROOT_CRAWL_BASEDIR="%%CHROOT_CRAWL_BASEDIR%%"
+CHROOT_DGLDIR="%%CHROOT_DGLDIR%%"
 DESTDIR="%%CRAWL_BASEDIR%%"
 VERSIONS_DB="%%VERSIONS_DB%%"
 CRAWL_UGRP="%%CRAWL_UGRP%%"
@@ -85,17 +86,17 @@ link-logfiles() {
 }
 
 create-dgl-directories() {
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-sprint/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-tut/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-git-zotdef/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-git/"
-    mkdir -p "$CHROOT/dgldir/rcfiles/crawl-git/"
-    mkdir -p "$CHROOT/dgldir/data/crawl-git-settings/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-sprint/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-tut/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-zotdef/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git/"
+    mkdir -p "%%CHROOT_RCFILESDIR%%/$GAME/"
+    mkdir -p $DGL_SETTINGS_DIR/$GAME-settings
 }
 
 fix-chroot-directory-permissions() {
-    chown -R crawl:crawl "$CHROOT/crawl-master"
-    chown -R crawl:crawl "$CHROOT/dgldir"
+    chown -R crawl:crawl "$CHROOT_CRAWL_BASEDIR"
+    chown -R crawl:crawl "$CHROOT_DGLDIR"
 }
 
 install-game() {
@@ -109,7 +110,7 @@ install-game() {
     link-logfiles
 
     chown -R $CRAWL_UGRP $SAVEDIR
-    ln -snf $GAME_BINARY $CHROOT$CHROOT_CRAWL_BASEDIR/crawl-latest
+    ln -snf $GAME_BINARY $CHROOT_CRAWL_BASEDIR/crawl-latest
 }
 
 register-game-version() {
@@ -167,9 +168,9 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
 
     # ABS_COMMON_DIR is the absolute path from outside the chroot
     # corresponding to COMMON_DIR
-    ABS_COMMON_DIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME
+    ABS_COMMON_DIR=$CHROOT_CRAWL_BASEDIR/$GAME
 
-    if [[ ! -d "$CHROOT$COMMON_DIR" ]]; then
+    if [[ ! -d "$COMMON_DIR" ]]; then
         echo -e "Expected to find common game dir $ABS_COMMON_DIR but did not find it"
         exit 1
     fi
@@ -177,8 +178,8 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     GAME_BINARY=$GAME-$REVISION
     BINARIES_DIR=$CHROOT$CHROOT_BINARIES
 
-    WEBDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/webserver
-    GAMEDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME_BINARY
+    WEBDIR=$CHROOT_CRAWL_BASEDIR/webserver
+    GAMEDIR=$CHROOT_CRAWL_BASEDIR/$GAME_BINARY
     # Absolute path to save game directory
     SAVEDIR=$GAMEDIR/saves
     DATADIR=$GAMEDIR/data

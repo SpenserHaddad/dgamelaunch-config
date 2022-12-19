@@ -2,12 +2,12 @@
 
 NAME=$1
 
-VERSIONS="git $(seq 25 25 | sed 's/^/0./')"
+VERSIONS="git $(seq 29 29 | sed 's/^/0./')"
 
 for v in $VERSIONS; do
-    cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-$v-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-$v/$NAME.rc"
-    cp --no-clobber "%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/crawl-$v/$NAME.macro"
+    cp --no-clobber "%%DGL_CHROOT%%/%%CHROOT_DGLDIR%%/data/crawl-$v-settings/init.txt" "%%CHROOT_RCFILESDIR%%/crawl-$v/$NAME.rc"
+    cp --no-clobber "%%DGL_CHROOT%%/%%CHROOT_DGLDIR%%/data/crawl-git.macro" "%%CHROOT_RCFILESDIR%%/crawl-$v/$NAME.macro"
 done
 
-mkdir -p "%%CHROOT_MORGUEDIR%%/$NAME"
-mkdir -p "%%CHROOT_TTYRECDIR%%/$NAME"
+mkdir -p "%%DGL_CHROOT%%/%%CHROOT_MORGUEDIR%%/$NAME"
+mkdir -p "%%DGL_CHROOT%%/%%CHROOT_TTYRECDIR%%/$NAME"

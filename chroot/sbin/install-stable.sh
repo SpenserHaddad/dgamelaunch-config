@@ -30,6 +30,7 @@ set -u
 CHROOT="%%DGL_CHROOT%%"
 CHROOT_BINARIES="%%CHROOT_CRAWL_BINARY_PATH%%"
 CHROOT_CRAWL_BASEDIR="%%CHROOT_CRAWL_BASEDIR%%"
+CHROOT_DGLDIR="%%CHROOT_DGLDIR%%"
 DESTDIR="%%CRAWL_BASEDIR%%"
 VERSIONS_DB="%%VERSIONS_DB%%"
 CRAWL_UGRP="%%CRAWL_UGRP%%"
@@ -78,17 +79,17 @@ create-dgl-directories() {
     local short_version
     short_version="${VERSION//0./}"  # 0.17 --> 17
     # TODO: use long version (0.17) for everything.
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$short_version-sprint/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$short_version-tut/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$short_version-zotdef/"
-    mkdir -p "$CHROOT/dgldir/inprogress/crawl-$short_version/"
-    mkdir -p "$CHROOT/dgldir/rcfiles/crawl-0.$short_version/"
-    mkdir -p "$CHROOT/dgldir/data/crawl-0.$short_version-settings/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$short_version-sprint/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$short_version-tut/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$short_version-zotdef/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$short_version/"
+    mkdir -p "%%CHROOT_RCFILESDIR%%/crawl-0.$short_version/"
+    mkdir -p "$DGL_SETTINGS_DIR/crawl-0.$short_version-settings/"
 }
 
 fix-chroot-directory-permissions() {
-    chown -R crawl:crawl "$CHROOT/crawl-master"
-    chown -R crawl:crawl "$CHROOT/dgldir"
+    chown -R crawl:crawl "$CHROOT_CRAWL_BASEDIR"
+    chown -R crawl:crawl "$CHROOT_DGLDIR"
 }
 
 install-game() {
@@ -132,7 +133,7 @@ assert-not-evil "$COMMON_DIR"
 
 # ABS_COMMON_DIR is the absolute path from outside the chroot
 # corresponding to COMMON_DIR
-ABS_COMMON_DIR=$CHROOT$COMMON_DIR
+ABS_COMMON_DIR=$COMMON_DIR
 
 if [[ ! -d "$ABS_COMMON_DIR" ]]; then
     mkdir -p "$ABS_COMMON_DIR"
@@ -141,7 +142,7 @@ fi
 GAME_BINARY=$GAME
 BINARIES_DIR=$CHROOT$CHROOT_BINARIES
 
-GAMEDIR=$CHROOT$CHROOT_CRAWL_BASEDIR/$GAME
+GAMEDIR=$CHROOT_CRAWL_BASEDIR/$GAME
 # Absolute path to save game directory
 SAVEDIR=$GAMEDIR/saves
 DATADIR=$GAMEDIR/data
