@@ -1,4 +1,4 @@
-Crawl server (SERVER_REGION) hosted and maintained SERVER_ADMIN.
+Crawl server hosted and maintained Spenser.
 ------------------------------------------------------------------------------
 Webtiles:           SERVER_URL
 Crawl information:  https://crawl.spenserhaddad.com
@@ -16,6 +16,8 @@ The next option allows you to reset your options.
 ALL CHANGES YOU'VE MADE TO YOUR OPTIONS WILL BE LOST.
 
 O) Reset options
+
+M) Reset macros
 
 q) Return to previous menu
 
