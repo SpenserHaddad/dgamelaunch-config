@@ -33,8 +33,8 @@ my @COPY_TARGETS = ([ 'dgamelaunch.conf', '//etc' ],
                     [ 'games.d/*.{yml,yaml}', "//crawl-master/webserver/games.d" ],
                     [ 'banned_players.yml', "//crawl-master/webserver" ],
                     [ 'banned_players.txt', "//crawl-master/webserver" ],
-                    [ 'chroot/data/menus/*.txt', "/$DGLDIR/data/menus" ],
-                    [ 'chroot/data/*.{rc,macro}', "/$DGLDIR/data" ],
+                    [ 'chroot/data/menus/*.txt', "/$CHROOT_MENUSDIR" ],
+                    [ 'chroot/data/*.{rc,macro}', "/" ],
                     [ 'chroot/bin/*.sh', '/bin' ],
                     [ 'chroot/sbin/*.sh', '/sbin' ]);
 
