@@ -9,7 +9,7 @@ Crawl information:  https://crawl.spenserhaddad.com
 Logged in as: $USERNAME
 W) Watch games in progress
 
-Dungeon Crawl Stone Soup Trunk:
+Dungeon Crawl Stone Soup 0.29.1:
 
 P)lay
 S)print

@@ -8,7 +8,7 @@ Crawl information:  https://crawl.spenserhaddad.com
 
 Logged in as: $USERNAME
 
-Game selected: Dungeon Crawl Stone Soup Trunk
+Game selected: Dungeon Crawl Stone Soup 0.29.1
 
 P)lay Crawl    S)print    T)utorial
 

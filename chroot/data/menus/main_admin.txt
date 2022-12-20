@@ -10,7 +10,7 @@ Rebuild:            SERVER_REBUILD_URL
 Logged in as: $USERNAME (admin)
 W) Watch games in progress
 
-Dungeon Crawl Stone Soup Trunk:
+Dungeon Crawl Stone Soup 0.29.1:
 
 P)lay
 S)print
