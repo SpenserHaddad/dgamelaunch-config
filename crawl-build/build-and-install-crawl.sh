@@ -12,12 +12,14 @@ check-crawl-basedir-exists
 # enable-prompts "$*"
 
 INSTALL_WEBSERVER="0"
+SET_LATEST=0
 
 # Handle input arguments
-while getopts r:v:w flag; do
+while getopts r:v:lw flag; do
     case "${flag}" in
         r) REVISION=${OPTARG}; echo "rev is $REVISION";;
         v) VERSION=${OPTARG}; echo "ver is ${OPTARG}";;
+        l) SET_LATEST="1";;
         w) INSTALL_WEBSERVER="1";;
         *) echo "Invalid argument $flag"; exit 1
     esac 
@@ -127,7 +129,7 @@ say-do sudo -H "$DGL_CHROOT/sbin/install-crawl.sh" \
     "$VERSION" \
     "$GAME" \
     "$INSTALL_WEBSERVER" \
-    "0"
+    $SET_LATEST
 
 announce "Installed new Crawl version on $DGL_SERVER: ${REVISION_FULL} (${SGV_MAJOR})"
 
