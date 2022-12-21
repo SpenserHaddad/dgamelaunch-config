@@ -1,5 +1,7 @@
 #! /bin/sh
 
+set -e
+
 NAME=$1
 
 VERSIONS="git"
