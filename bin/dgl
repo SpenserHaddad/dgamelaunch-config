@@ -105,4 +105,4 @@ cd "$DGL_CONF_HOME"
 source ./sh-utils
 
 SCRIPT_NAME="$SCRIPT_NAME $ACTION"
-source "$ACTION_SCRIPT"
+source "$ACTION_SCRIPT" $@
