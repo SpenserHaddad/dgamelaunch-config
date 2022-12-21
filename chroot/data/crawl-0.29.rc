@@ -1,0 +1,13 @@
+# Custom settings for crawl.spenserhaddad.com
+# Find the full list of options at:
+#   https://github.com/crawl/crawl/blob/master/crawl-ref/docs/options_guide.txt
+# The default configuration file also has some useful info:
+#   https://github.com/crawl/dgamelaunch-config/blob/master/chroot/data/dgl-default.crawl-0.25.rc
+
+# Custom: set view size to maximum allowed
+view_max_width=81
+view_max_height=71
+
+# Show scroll like it's a native version
+travel_delay=25
+rest_delay=20
