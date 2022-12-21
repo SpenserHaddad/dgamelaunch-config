@@ -7,8 +7,8 @@ NAME=$1
 VERSIONS="git"
 
 for v in $VERSIONS; do
-    cp --no-clobber "%%DGL_CHROOT%%/crawl-$v.rc" "%%RCFILESDIR%%/crawl-$v/$NAME.rc"
-    cp --no-clobber "%%DGL_CHROOT%%/crawl-git.macro" "%%RCFILESDIR%%/crawl-$v/$NAME.macro"
+    cp --no-clobber "%%DGLDIR%%/crawl-$v.rc" "%%RCFILESDIR%%/crawl-$v/$NAME.rc"
+    cp --no-clobber "%%DGLDIR%%/crawl-git.macro" "%%RCFILESDIR%%/crawl-$v/$NAME.macro"
 done
 
 mkdir -p "%%MORGUEDIR%%/$NAME"
