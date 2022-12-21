@@ -30,10 +30,8 @@ shopt -s extglob
 # These are not overrideable:
 CHROOT="%%DGL_CHROOT%%"
 CHROOT_BINARIES="%%CHROOT_CRAWL_BINARY_PATH%%"
-GAME="%%GAME%%"
 CHROOT_CRAWL_BASEDIR="%%CHROOT_CRAWL_BASEDIR%%"
 CHROOT_DGLDIR="%%CHROOT_DGLDIR%%"
-DESTDIR="%%CRAWL_BASEDIR%%"
 VERSIONS_DB="%%VERSIONS_DB%%"
 CRAWL_UGRP="%%CRAWL_UGRP%%"
 DGL_SETTINGS_DIR="%%DGL_SETTINGS_DIR%%"
@@ -42,6 +40,10 @@ REVISION="$1"
 DESCRIPTION="$2"
 SGV_MAJOR="$3"
 SGV_MINOR="$4"
+VERSION="$5"
+GAME="$6"
+INSTALL_WEBSERVER="$7"
+SET_LATEST="$8" # If set, indicates this should be treated as the "latest" Crawl version
 
 # Safe path:
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
@@ -54,30 +56,36 @@ fi
 copy-game-binary() {
     echo "Installing game binary ($GAME_BINARY) in $BINARIES_DIR"
     mkdir -p $BINARIES_DIR
-    cp source/$GAME_BINARY $BINARIES_DIR
-    ln -sf $GAME_BINARY $BINARIES_DIR/crawl-latest
+
+    if [[ -f $BINARIES_DIR/$GAME_BINARY ]]; then
+        mv $BINARIES_DIR/$GAME_BINARY $BINARIES_DIR/$GAME_BINARY.old
+    fi
+
+    if cp source/$GAME_BINARY $BINARIES_DIR; then
+        rm $BINARIES_DIR/$GAME_BINARY.old || true
+    else
+        local ERR=$?
+        mv $BINARIES_DIR/$GAME_BINARY.old $BINARIES_DIR/$GAME_BINARY || true
+        return $ERR
+    fi
+    
+    if [[ $SET_LATEST ]]; then
+        ln -sf $GAME_BINARY $BINARIES_DIR/crawl-latest
+    fi
 }
 
 copy-data-files() {
     echo "Copying game data files to $DATADIR"
-    cp -r source/dat docs settings $DATADIR
+    cp -r source/dat docs settings "$DATADIR"
     # Only one of these exists, don't error for the other.
-    cp -r README.txt README.md $DATADIR 2>/dev/null || true
+    cp -r README.txt README.md "$DATADIR" 2>/dev/null || true
     cp -r settings/. $DGL_SETTINGS_DIR/$GAME-settings
-    cp -r source/webserver/game_data/. $DATADIR/web
-    cp -r source/webserver/!(config.py|game_data|templates) $WEBDIR
-    cp source/webserver/templates/client.html $WEBDIR/templates/
-    cp source/webserver/templates/game_links.html $WEBDIR/templates/
-
-    # AFAIK current server admins have customizations in these files, so only
-    # copy the other templates over if they're not already present.
-    cp --no-clobber source/webserver/templates/*.html $WEBDIR/templates/
 
     mkdir -p "$ABS_COMMON_DIR/data/docs"
     cp docs/crawl_changelog.txt "$ABS_COMMON_DIR/data/docs"
 }
 
-link-logfiles() {
+link-logfiles() { 
     for file in logfile milestones scores; do
         ln -sf $COMMON_DIR/saves/$file $SAVEDIR
         ln -sf $COMMON_DIR/saves/$file-sprint $SAVEDIR
@@ -86,10 +94,10 @@ link-logfiles() {
 }
 
 create-dgl-directories() {
-    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-sprint/"
-    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-tut/"
-    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git-zotdef/"
-    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-git/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$VERSION-sprint/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$VERSION-tut/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$VERSION-zotdef/"
+    mkdir -p "%%CHROOT_INPROGRESSDIR%%/crawl-$VERSION/"
     mkdir -p "%%CHROOT_RCFILESDIR%%/$GAME/"
     mkdir -p $DGL_SETTINGS_DIR/$GAME-settings
 }
@@ -107,10 +115,23 @@ install-game() {
     fix-chroot-directory-permissions
     copy-game-binary
     copy-data-files
-    link-logfiles
 
-    chown -R $CRAWL_UGRP $SAVEDIR
-    ln -snf $GAME_BINARY $CHROOT_CRAWL_BASEDIR/crawl-latest
+    if [[ $SET_LATEST ]]; then
+        link-logfiles
+        chown -R $CRAWL_UGRP $SAVEDIR
+    fi
+
+}
+
+install-webserver() {
+    cp -r source/webserver/game_data/. "$DATADIR"/web
+    cp -r source/webserver/!(config.py|game_data|templates) $WEBDIR
+    cp source/webserver/templates/client.html $WEBDIR/templates/
+    cp source/webserver/templates/game_links.html $WEBDIR/templates/
+
+    # AFAIK current server admins have customizations in these files, so only
+    # copy the other templates over if they're not already present.
+    cp --no-clobber source/webserver/templates/*.html $WEBDIR/templates/
 }
 
 register-game-version() {
@@ -171,11 +192,10 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     ABS_COMMON_DIR=$CHROOT_CRAWL_BASEDIR/$GAME
 
     if [[ ! -d "$COMMON_DIR" ]]; then
-        echo -e "Expected to find common game dir $ABS_COMMON_DIR but did not find it"
-        exit 1
+        mkdir -p "$ABS_COMMON_DIR"
     fi
 
-    GAME_BINARY=$GAME-$REVISION
+    GAME_BINARY=$GAME
     BINARIES_DIR=$CHROOT$CHROOT_BINARIES
 
     WEBDIR=$CHROOT_CRAWL_BASEDIR/webserver
@@ -187,8 +207,12 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     assert-not-evil "$DATADIR"
 
     echo "Installing game"
+    echo "save dir is $SAVEDIR"
     install-game
     register-game-version
+    if [[ INSTALL_WEBSERVER ]]; then
+        install-webserver
+    fi
 else
     echo "Could not figure out version tags. Installation cancelled."
     echo "Aborting installation!"

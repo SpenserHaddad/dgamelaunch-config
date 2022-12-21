@@ -4,7 +4,7 @@ set -e
 
 NAME=$1
 
-VERSIONS="git"
+VERSIONS="%%CRAWL_VERSIONS%%"
 
 for v in $VERSIONS; do
     cp --no-clobber "%%DGLDIR%%/crawl-$v.rc" "%%RCFILESDIR%%/crawl-$v/$NAME.rc"
