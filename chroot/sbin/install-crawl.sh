@@ -212,7 +212,7 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     echo "save dir is $SAVEDIR"
     install-game
     register-game-version
-    if INSTALL_WEBSERVER; then
+    if $INSTALL_WEBSERVER; then
         echo "Installing webserver"
         install-webserver
     fi
