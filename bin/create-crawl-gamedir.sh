@@ -27,6 +27,7 @@ mkdir -p "$CHROOT_CRAWL_BASEDIR" \
          "$CHROOT_TTYRECDIR" \
          "$CHROOT_MENUSDIR" \
          "$CHROOT_INPROGRESSDIR" \
+         "$CHROOT_SAVEDIR"
 touch "$DGL_CHROOT/dgamelaunch" "$DGL_CHROOT/dgldebug.log"
 echo "Own $DGLDIR and $CHROOT_CRAWL_BASEDIR"
 chown -R $CRAWL_UGRP "$DGL_CHROOT/dgldebug.log" "$DGLDIR" "$CHROOT_CRAWL_BASEDIR"

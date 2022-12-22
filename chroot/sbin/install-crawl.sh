@@ -35,6 +35,7 @@ CHROOT_DGLDIR="%%CHROOT_DGLDIR%%"
 VERSIONS_DB="%%VERSIONS_DB%%"
 CRAWL_UGRP="%%CRAWL_UGRP%%"
 DGL_SETTINGS_DIR="%%DGL_SETTINGS_DIR%%"
+SAVE_DIR="%%SAVEDIR%%"
 
 REVISION="$1"
 DESCRIPTION="$2"
@@ -117,9 +118,10 @@ install-game() {
     copy-data-files
 
     if [[ $SET_LATEST ]]; then
+        echo "Setting latest version to $GAME"
         link-logfiles
-        chown -R $CRAWL_UGRP $SAVEDIR
     fi
+    chown -R $CRAWL_UGRP $SAVEDIR
 
 }
 
@@ -201,7 +203,7 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     WEBDIR=$CHROOT_CRAWL_BASEDIR/webserver
     GAMEDIR=$CHROOT_CRAWL_BASEDIR/$GAME_BINARY
     # Absolute path to save game directory
-    SAVEDIR=$GAMEDIR/saves
+    SAVEDIR=$CHROOT/$CHROOT_DGLDIR/$GAME_BINARY/saves
     DATADIR=$GAMEDIR/data
     assert-not-evil "$SAVEDIR"
     assert-not-evil "$DATADIR"
@@ -210,7 +212,8 @@ if [[ -n "${SGV_MAJOR}" && -n "${SGV_MINOR}" ]]; then
     echo "save dir is $SAVEDIR"
     install-game
     register-game-version
-    if [[ INSTALL_WEBSERVER ]]; then
+    if INSTALL_WEBSERVER; then
+        echo "Installing webserver"
         install-webserver
     fi
 else

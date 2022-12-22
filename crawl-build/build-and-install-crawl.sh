@@ -11,16 +11,16 @@ export DESTDIR=$CRAWL_BASEDIR
 check-crawl-basedir-exists
 # enable-prompts "$*"
 
-INSTALL_WEBSERVER="0"
-SET_LATEST=0
+INSTALL_WEBSERVER=false
+SET_LATEST=false
 
 # Handle input arguments
 while getopts r:v:lw flag; do
     case "${flag}" in
         r) REVISION=${OPTARG}; echo "rev is $REVISION";;
         v) VERSION=${OPTARG}; echo "ver is ${OPTARG}";;
-        l) SET_LATEST="1";;
-        w) INSTALL_WEBSERVER="1";;
+        l) SET_LATEST=true;;
+        w) INSTALL_WEBSERVER=true;;
         *) echo "Invalid argument $flag"; exit 1
     esac 
 done
@@ -96,10 +96,10 @@ prompt "compile ${GAME}-${REVISION}"
     DESTDIR="${DESTDIR}" \
     prefix= \
     bin_prefix=/bin \
-    SAVEDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
+    SAVEDIR=$SAVEDIR/${GAME} \
     DATADIR=$CHROOT_CRAWL_BASEDIR/${GAME}/data \
     WEBDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/data/web \
-    SHAREDDIR=$CHROOT_CRAWL_BASEDIR/${GAME}/saves \
+    SHAREDDIR=$SAVEDIR/${GAME} \
     USE_PCRE=y \
     EXTERNAL_FLAGS_L="-g"
 )
